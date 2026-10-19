@@ -173,8 +173,9 @@ export function Inspector({ run, renderStartedAt, renderFinishedAt }: InspectorP
                   events around deterministic local work.
                 </li>
                 <li>
-                  <code>RENDER_STARTED</code> / <code>RENDER_FINISHED</code> are recorded by the
-                  host when React commits the result panel — not by the experiment runner.
+                  Host paint timing above is best-effort React commit/paint delta kept in UI state.
+                  <code>RENDER_STARTED</code> / <code>RENDER_FINISHED</code> exist on the event
+                  schema but are <strong>not</strong> appended to <code>run.events</code> in M1.
                 </li>
                 <li>
                   Future placeholders (never invented): TTFT, TTFC, TTI, TTC, inputTokens,

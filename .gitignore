@@ -22,3 +22,6 @@ blob-report
 # Local agent tooling (not part of the published lab)
 .agents/
 skills-lock.json
+
+# Git worktrees (local isolation)
+.worktrees/

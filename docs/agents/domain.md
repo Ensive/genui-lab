@@ -4,11 +4,13 @@ How the engineering skills should consume this repo's domain documentation when 
 
 ## Before exploring, read these
 
-- **`GLOSSARY.md`** at the repo root
+- **`GLOSSARY.md`** at the repo root (required vocabulary for this lab)
 - **`docs/adr/`**: read ADRs that touch the area you're about to work in
 - **`docs/architecture/overview.md`**: layer model and control spectrum for GenUI Lab
+- **`docs/design/m1-foundation.md`**: M1 vertical-slice design intent
+- **`AGENTS.md`**: current milestone, boundaries, and validation commands
 
-If any of these files don't exist, **proceed silently**. Don't flag their absence; don't suggest creating them upfront. The `/domain-modeling` skill (reached via `/grill-with-docs` and `/improve-codebase-architecture`) creates them lazily when terms or decisions actually get resolved.
+If a referenced skill doc is missing in a fork, **proceed silently** rather than blocking exploration. Prefer extending `GLOSSARY.md` / ADRs via `/domain-modeling` when new terms or decisions are actually resolved.
 
 ## File structure
 
@@ -16,11 +18,14 @@ Single-context repo (this project — one product vocabulary across the pnpm wor
 
 ```
 /
+├── AGENTS.md
 ├── GLOSSARY.md
 ├── docs/adr/
 │   ├── 0001-stable-core-framework-adapters.md
 │   └── 0002-fixture-first-before-model-integration.md
 ├── docs/architecture/
+├── docs/design/
+├── docs/agents/
 ├── apps/
 └── packages/
 ```
