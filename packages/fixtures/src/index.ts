@@ -1,0 +1,6 @@
+export {
+  CANONICAL_EXPERIMENT_ID,
+  CANONICAL_GENERATED_AT,
+  CANONICAL_TASK,
+  TELEMETRY_DEMO_001,
+} from "./telemetry-demo-001.js";

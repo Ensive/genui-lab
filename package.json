@@ -1,0 +1,25 @@
+{
+  "name": "genui-lab",
+  "private": true,
+  "version": "0.1.0",
+  "description": "An instrumented laboratory for generative, agentic, and intelligent user interfaces.",
+  "packageManager": "pnpm@12.14.0",
+  "scripts": {
+    "dev": "pnpm --filter @genui-lab/web dev",
+    "build": "pnpm -r --filter \"./packages/**\" build && pnpm --filter @genui-lab/web build",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r --filter \"./packages/**\" test && pnpm --filter @genui-lab/web test",
+    "test:e2e": "pnpm --filter @genui-lab/web test:e2e",
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "MIT"
+}
