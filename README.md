@@ -47,13 +47,14 @@ fixture → TelemetryAnalysis → RepresentationAdapter → Renderer → Inspect
 
 Framework-specific systems (AG-UI, A2UI, json-render, OpenUI, assistant-ui, MCP Apps) enter through **adapters**, not a fake universal AST. See [docs/architecture/overview.md](docs/architecture/overview.md).
 
-## What works today (M1)
+## What works today (M1 + M2)
 
 - Deterministic synthetic automotive telemetry (`DEMO-001`)
 - Normalized domain analysis with Zod validation
 - **Markdown** representation (no LLM)
 - **Tool-bound React UI** with metrics, alerts, time-series chart, sources
-- Inspector: run metadata, domain JSON, representation payload, lifecycle events, timing
+- **AG-UI 1.0 fixture agent** (`@genui-lab/ag-ui-adapter`): lifecycle, tool calls, shared state, interrupt → resume (simulated; not a live model)
+- Inspector: run metadata, domain JSON, representation, **Protocol**, **Shared state**, **Lab lifecycle**, timing
 - Offline after `pnpm install` — **no API key required**
 
 ## Planned rendering modes
@@ -137,7 +138,8 @@ Details: [docs/experiments/telemetry-001.md](docs/experiments/telemetry-001.md)
 | Milestone | Focus |
 | --- | --- |
 | **M1 — Foundation** | Fixtures, domain, Markdown, tool UI, inspector, events, tests *(complete on `main`)* |
-| **M2 — AG-UI** | Agent lifecycle, state snapshot/delta, tool events, HITL — without conflating AG-UI with UI representation |
+| **M2 — AG-UI** | Fixture `AbstractAgent`, protocol inspector, shared state, interrupt/resume *(this PR)* |
+| **M2.1 — Live agent** | HttpAgent + OpenRouter (optional) behind the same inspector |
 | **M3 — Declarative GenUI** | json-render, A2UI, OpenUI on the same task |
 | **M4 — assistant-ui** | Compare shell value vs native tool UI / Spec Mode / AG-UI runtime |
 | **M5 — MCP App** | Sandboxed telemetry explorer vs catalog UI |

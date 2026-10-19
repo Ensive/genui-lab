@@ -13,6 +13,8 @@
     "lint": "biome check ."
   },
   "dependencies": {
+    "@ag-ui/core": "1.0.3",
+    "@genui-lab/ag-ui-adapter": "workspace:*",
     "@genui-lab/domain": "workspace:*",
     "@genui-lab/experiment-core": "workspace:*",
     "@genui-lab/fixtures": "workspace:*",

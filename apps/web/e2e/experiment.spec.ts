@@ -8,13 +8,19 @@ test.describe("GenUI Lab vertical slice", () => {
       page.getByRole("heading", { name: /Instrumented UI architecture lab/i }),
     ).toBeVisible();
     await expect(page.getByText(/Analyze vehicle telemetry for VIN DEMO-001/i)).toBeVisible();
+    await expect(page.getByTestId("ag-ui-fixture-badge")).toBeVisible();
 
     await page.getByTestId("run-experiment").click();
     await expect(page.getByTestId("markdown-result")).toBeVisible();
     await expect(page.getByTestId("markdown-result")).toContainText("battery");
+    await expect(page.getByTestId("ag-ui-interrupt")).toBeVisible();
 
     await page.getByRole("tab", { name: "Domain result" }).click();
     await expect(page.getByTestId("inspector-domain")).toContainText("analysis:telemetry-demo-001");
+
+    await page.getByRole("tab", { name: "Protocol" }).click();
+    await expect(page.getByTestId("inspector-protocol")).toContainText("RUN_STARTED");
+    await expect(page.getByTestId("inspector-protocol")).toContainText("RUN_FINISHED");
 
     await page.getByRole("tab", { name: "Run" }).click();
     await expect(page.getByTestId("inspector-run")).toContainText("markdown");
@@ -28,8 +34,21 @@ test.describe("GenUI Lab vertical slice", () => {
     await page.getByRole("tab", { name: "Representation" }).click();
     await expect(page.getByTestId("inspector-representation")).toContainText("tool-ui");
 
-    await page.getByRole("tab", { name: "Events" }).click();
+    await page.getByRole("tab", { name: "Lab lifecycle" }).click();
     await expect(page.getByTestId("inspector-events")).toContainText("RUN_STARTED");
     await expect(page.getByTestId("inspector-events")).toContainText("DOMAIN_ANALYSIS_FINISHED");
+  });
+
+  test("AG-UI interrupt approve updates shared state", async ({ page }) => {
+    await page.goto("/");
+    await page.getByTestId("run-experiment").click();
+    await expect(page.getByTestId("ag-ui-interrupt")).toBeVisible();
+    await page.getByTestId("ag-ui-approve").click();
+    await expect(page.getByTestId("ag-ui-interrupt")).toHaveCount(0);
+    await page.getByRole("tab", { name: "Shared state" }).click();
+    await expect(page.getByTestId("inspector-shared-state")).toContainText(
+      "classificationApproved",
+    );
+    await expect(page.getByTestId("inspector-shared-state")).toContainText("true");
   });
 });
