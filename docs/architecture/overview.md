@@ -134,3 +134,16 @@ Honest metrics in M1:
 - `totalRunMs`
 
 Host UI may also record best-effort render paint timing. LLM metrics (TTFT, tokens, cost) remain explicit null placeholders until model integration exists.
+
+## Further reading
+
+| Doc | Topic |
+| --- | --- |
+| [m1-foundation.md](../design/m1-foundation.md) | Bootstrap / M1 design capture |
+| [packages.md](packages.md) | Workspace ownership and dependency direction |
+| [representations.md](representations.md) | Adapter pattern and render modes |
+| [ui-contract.md](ui-contract.md) | Controlled vocabulary and stable IDs |
+| [observability.md](observability.md) | Events and honest metrics |
+| [protocols.md](protocols.md) | AG-UI vs A2UI vs json-render vs OpenUI vs MCP Apps vs assistant-ui |
+| [../../GLOSSARY.md](../../GLOSSARY.md) | Controlled vocabulary |
+| [../../AGENTS.md](../../AGENTS.md) | Agent handoff notes |

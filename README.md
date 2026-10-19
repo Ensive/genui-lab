@@ -92,6 +92,8 @@ pnpm build
 
 ```text
 genui-lab/
+├── AGENTS.md                 agent handoff notes
+├── GLOSSARY.md               controlled vocabulary
 ├── apps/web/
 ├── packages/
 │   ├── domain/
@@ -100,8 +102,10 @@ genui-lab/
 │   ├── fixtures/
 │   └── observability/
 ├── docs/
-│   ├── architecture/
+│   ├── architecture/         layers, adapters, protocols, …
+│   ├── design/               milestone design captures
 │   ├── adr/
+│   ├── agents/               issue/triage skill adapters
 │   └── experiments/
 ├── .github/workflows/
 ├── package.json
@@ -132,7 +136,7 @@ Details: [docs/experiments/telemetry-001.md](docs/experiments/telemetry-001.md)
 
 | Milestone | Focus |
 | --- | --- |
-| **M1 — Foundation** | Fixtures, domain, Markdown, tool UI, inspector, events, tests *(this commit)* |
+| **M1 — Foundation** | Fixtures, domain, Markdown, tool UI, inspector, events, tests *(complete on `main`)* |
 | **M2 — AG-UI** | Agent lifecycle, state snapshot/delta, tool events, HITL — without conflating AG-UI with UI representation |
 | **M3 — Declarative GenUI** | json-render, A2UI, OpenUI on the same task |
 | **M4 — assistant-ui** | Compare shell value vs native tool UI / Spec Mode / AG-UI runtime |
