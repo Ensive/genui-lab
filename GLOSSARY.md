@@ -48,6 +48,30 @@ M1 policy: deterministic synthetic data and deterministic representations before
 
 One execution of a canonical task through a chosen render mode (`ExperimentRun`), including domain result, representation envelope, events, and metrics.
 
+### Agent protocol
+
+The bidirectional event/state channel between an agent runtime and the application. In this lab, **AG-UI** occupies this layer. It is **not** a render mode.
+
+**Avoid:** representation, chat UI, GenUI format.
+
+### Shared state
+
+The AG-UI agent↔application sync value updated via `STATE_SNAPSHOT` / `STATE_DELTA`. Compact and protocol-owned; not authoritative domain analysis and not a UI representation.
+
+**Avoid:** `TelemetryAnalysis`, representation payload, `selectedRenderMode`.
+
+### Interrupt
+
+An AG-UI run that ends with `RUN_FINISHED` outcome `type: "interrupt"`. Continuation is a **new run** on the same thread with `resume` entries for every interrupt — not a mid-stream pause and not an invented `INTERRUPT` event.
+
+**Avoid:** error, cancel, browser alert.
+
+### Lab lifecycle event
+
+An experiment-core observability event (`DOMAIN_ANALYSIS_*`, lab `RUN_STARTED` / `RUN_COMPLETED`, etc.). Distinct from AG-UI protocol events even when names collide (both may emit `RUN_STARTED`).
+
+**Avoid:** AG-UI event, protocol event (when you mean lab instrumentation).
+
 ## Protocols vs representations (do not conflate)
 
 | Term | Means in this repo |

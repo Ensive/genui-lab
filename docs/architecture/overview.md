@@ -50,8 +50,8 @@ Not every experiment uses every layer.
 | Layer | Role in GenUI Lab | Notes |
 | --- | --- | --- |
 | Domain / authoritative state | Deterministic telemetry analysis | Source of truth; never the generated UI |
-| Intelligence / agent runtime | Future AG-UI / model integrations | Absent in M1 on purpose |
-| Agent ↔ application protocol | AG-UI-style event/state sync | Not a UI representation format |
+| Intelligence / agent runtime | Fixture `AbstractAgent` in M2; live models later (M2.1+) | Not a render mode |
+| Agent ↔ application protocol | AG-UI 1.0 event/state sync via `@genui-lab/ag-ui-adapter` | Distinct from lab lifecycle events and UI representations |
 | UI representation | Markdown, tool UI tree, later A2UI / json-render / OpenUI | Architecture-specific payloads |
 | Renderer + component catalog | React shell + controlled vocabulary | Stable component IDs |
 | Product UI | Experiment shell + inspector | Developer-tool surface |
