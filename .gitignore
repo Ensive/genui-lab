@@ -17,6 +17,7 @@ blob-report
 .idea
 .vscode/*
 !.vscode/extensions.json
+.scratch/
 
 # Local agent tooling (not part of the published lab)
 .agents/
