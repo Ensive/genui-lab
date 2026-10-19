@@ -13,7 +13,7 @@ genui-lab/
     └── observability/        events + honest metrics
 ```
 
-## Dependency direction
+## Dependency direction (imports)
 
 ```text
 fixtures ──► domain
@@ -22,6 +22,8 @@ apps/web ──► domain, fixtures, experiment-core, ui-contract, observability
 ```
 
 `domain` and `observability` must not depend on `apps/web` or React.
+
+**Data flow** for a run (not the same as import arrows): fixture samples → `analyzeTelemetry` → adapters → renderers/inspector.
 
 ## Ownership detail
 
@@ -72,5 +74,5 @@ apps/web ──► domain, fixtures, experiment-core, ui-contract, observability
 | --- | --- |
 | Fixture determinism, anomalies, schemas | `packages/domain`, `packages/fixtures` |
 | Markdown / runner lifecycle | `packages/experiment-core` |
-| Stable IDs | `packages/ui-contract` |
+| Stable IDs | `packages/domain` (analysis entities) + `packages/ui-contract` (UI nodes) |
 | App wiring / e2e | `apps/web` |

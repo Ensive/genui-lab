@@ -50,10 +50,10 @@ Tracked context: issue [#1](https://github.com/Ensive/genui-lab/issues/1) (hando
 | `packages/observability` | Lifecycle events + honest timing metrics | Invented LLM/cost/TTFT values |
 | `apps/web` | React shell, design system, renderers, inspector | Becoming the source of truth for domain state |
 
-Vertical slice today:
+Vertical **data** flow today (not package import arrows — see [packages.md](docs/architecture/packages.md)):
 
 ```text
-fixtures → domain → experiment-core adapters → apps/web renderers + inspector
+fixture samples → analyzeTelemetry → adapters → renderers + inspector
 ```
 
 ## Hard constraints
