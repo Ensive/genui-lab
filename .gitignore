@@ -17,3 +17,7 @@ blob-report
 .idea
 .vscode/*
 !.vscode/extensions.json
+
+# Local agent tooling (not part of the published lab)
+.agents/
+skills-lock.json
