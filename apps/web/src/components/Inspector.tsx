@@ -236,10 +236,18 @@ export function Inspector({
                   or token counts.
                 </li>
                 <li>
-                  Future placeholders (never invented): TTFT, TTFC, TTI, TTC, inputTokens,
-                  outputTokens, cost.
+                  Placeholders stay null until real instrumentation exists — never invent values.
                 </li>
               </ul>
+              <dl className="mt-3 grid grid-cols-2 gap-2 font-mono text-[10px]">
+                <div>ttftMs: null</div>
+                <div>ttfcMs: null</div>
+                <div>ttiMs: null</div>
+                <div>ttcMs: null</div>
+                <div>inputTokens: null</div>
+                <div>outputTokens: null</div>
+                <div>costUsd: null</div>
+              </dl>
             </div>
           </div>
         ) : (

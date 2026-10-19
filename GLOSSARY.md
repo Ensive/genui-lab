@@ -30,7 +30,7 @@ One comparable path through the lab (`markdown`, `tool-ui`, planned: `generated-
 
 ### Inspector
 
-First-class product surface that shows run metadata, domain JSON, raw representation, lifecycle events, and honest timing — so architectures stay **observable**.
+First-class product surface that shows run metadata, domain JSON, raw representation, **AG-UI Protocol** events, **Shared state**, **Lab lifecycle** events, and honest timing — so architectures stay **observable**.
 
 ### Stable semantic ID
 

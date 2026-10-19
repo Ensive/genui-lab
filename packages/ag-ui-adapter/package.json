@@ -22,11 +22,11 @@
     "@ag-ui/client": "1.0.3",
     "@ag-ui/core": "1.0.3",
     "@genui-lab/domain": "workspace:*",
-    "@genui-lab/fixtures": "workspace:*",
     "rxjs": "7.8.1",
     "zod": "4.6.7"
   },
   "devDependencies": {
+    "@genui-lab/fixtures": "workspace:*",
     "typescript": "5.9.3",
     "vitest": "5.0.5"
   }

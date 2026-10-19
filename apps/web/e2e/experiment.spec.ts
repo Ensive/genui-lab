@@ -43,6 +43,15 @@ test.describe("GenUI Lab vertical slice", () => {
     await page.goto("/");
     await page.getByTestId("run-experiment").click();
     await expect(page.getByTestId("ag-ui-interrupt")).toBeVisible();
+
+    await page.getByRole("tab", { name: "Shared state" }).click();
+    await expect(page.getByTestId("inspector-shared-state")).toContainText(
+      "analysis:telemetry-demo-001",
+    );
+    await expect(page.getByTestId("inspector-shared-state")).not.toContainText(
+      "classificationApproved",
+    );
+
     await page.getByTestId("ag-ui-approve").click();
     await expect(page.getByTestId("ag-ui-interrupt")).toHaveCount(0);
     await page.getByRole("tab", { name: "Shared state" }).click();
@@ -50,5 +59,18 @@ test.describe("GenUI Lab vertical slice", () => {
       "classificationApproved",
     );
     await expect(page.getByTestId("inspector-shared-state")).toContainText("true");
+  });
+
+  test("AG-UI interrupt reject updates shared state", async ({ page }) => {
+    await page.goto("/");
+    await page.getByTestId("run-experiment").click();
+    await expect(page.getByTestId("ag-ui-interrupt")).toBeVisible();
+    await page.getByTestId("ag-ui-reject").click();
+    await expect(page.getByTestId("ag-ui-interrupt")).toHaveCount(0);
+    await page.getByRole("tab", { name: "Shared state" }).click();
+    await expect(page.getByTestId("inspector-shared-state")).toContainText(
+      "classificationApproved",
+    );
+    await expect(page.getByTestId("inspector-shared-state")).toContainText("false");
   });
 });
