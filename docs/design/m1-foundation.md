@@ -75,7 +75,7 @@ Tabs/sections:
 | Run | run ID, mode, status, started, duration |
 | Domain result | pretty-printed `TelemetryAnalysis` |
 | Representation | Markdown source or serializable tool-UI tree |
-| Events | chronological lifecycle offsets (`+0.0ms RUN_STARTED`, …) |
+| Events (M1 name) | chronological **lab lifecycle** offsets (`+0.0ms RUN_STARTED`, …) — later renamed **Lab lifecycle** in the UI (M2) |
 | Timing | honest `domainAnalysisMs`, `representationMs`, `totalRunMs`; placeholders for future LLM metrics |
 
 Do not fake render-completion timing if React makes it ambiguous — document what was measured.
