@@ -6,7 +6,7 @@ Full table + ordering: **[roadmap.md](./roadmap.md)**.
 
 | Milestone | Status | Design doc | GitHub |
 | --- | --- | --- | --- |
-| M1 — Foundation | Done on `main` | [m1-foundation.md](./m1-foundation.md) | Historical (bootstrap) |
+| M1 — Foundation | Done on `main` | [m1-foundation.md](./m1-foundation.md) | [#17](https://github.com/Ensive/genui-lab/issues/17) (closed) |
 | M2 — AG-UI fixture | Done on `main` | [m2-ag-ui.md](./m2-ag-ui.md) | [#3](https://github.com/Ensive/genui-lab/issues/3) (closed) |
 | M2.1 — Live agent | Planned (optional) | [m2.1-live-agent.md](./m2.1-live-agent.md) | [#10](https://github.com/Ensive/genui-lab/issues/10) |
 | M3 — Declarative GenUI | Planned | [m3-declarative-genui.md](./m3-declarative-genui.md) | [#11](https://github.com/Ensive/genui-lab/issues/11) |

@@ -1,5 +1,8 @@
 # Design: M1 Foundation
 
+**Status:** Done on `main`.  
+**GitHub:** [#17](https://github.com/Ensive/genui-lab/issues/17) (closed, historical parent)
+
 This document captures the **bootstrap / M1** design intent so later sessions do not need the original founding prompt.
 
 ## Goal

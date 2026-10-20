@@ -139,7 +139,7 @@ Details: [docs/experiments/telemetry-001.md](docs/experiments/telemetry-001.md)
 
 | Milestone | Focus |
 | --- | --- |
-| **M1 — Foundation** | Fixtures, domain, Markdown, tool UI, inspector, events, tests — **done** |
+| **M1 — Foundation** | Fixtures, domain, Markdown, tool UI, inspector, events, tests — **done** — [#17](https://github.com/Ensive/genui-lab/issues/17) · [design](docs/design/m1-foundation.md) |
 | **M2 — AG-UI** | Fixture `AbstractAgent`, protocol inspector, shared state, interrupt/resume — **done** |
 | **M2.1 — Live agent** | HttpAgent + OpenRouter (optional) — [#10](https://github.com/Ensive/genui-lab/issues/10) · [design](docs/design/m2.1-live-agent.md) |
 | **M3 — Declarative GenUI** | json-render, A2UI, OpenUI on the same task — [#11](https://github.com/Ensive/genui-lab/issues/11) · [design](docs/design/m3-declarative-genui.md) |
