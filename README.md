@@ -80,6 +80,8 @@ pnpm dev
 
 Open the printed local URL (default `http://localhost:5173`).
 
+Core Telemetry 001 + fixture AG-UI work **offline** (no API key). For future live-agent work (M2.1), copy [`.env.example`](.env.example) to `.env.local`.
+
 ```bash
 pnpm check          # lint + typecheck + unit tests + build
 pnpm test           # unit tests
@@ -137,14 +139,16 @@ Details: [docs/experiments/telemetry-001.md](docs/experiments/telemetry-001.md)
 
 | Milestone | Focus |
 | --- | --- |
-| **M1 — Foundation** | Fixtures, domain, Markdown, tool UI, inspector, events, tests *(complete on `main`)* |
-| **M2 — AG-UI** | Fixture `AbstractAgent`, protocol inspector, shared state, interrupt/resume *(this PR)* |
-| **M2.1 — Live agent** | HttpAgent + OpenRouter (optional) behind the same inspector |
-| **M3 — Declarative GenUI** | json-render, A2UI, OpenUI on the same task |
-| **M4 — assistant-ui** | Compare shell value vs native tool UI / Spec Mode / AG-UI runtime |
-| **M5 — MCP App** | Sandboxed telemetry explorer vs catalog UI |
-| **M6 — Intelligent routing** | Rules / semantic / bounded / LLM selection of representation |
-| **M7 — Reliability/evals** | Schema validity, UI stability, injection tests, replay, a11y |
+| **M1 — Foundation** | Fixtures, domain, Markdown, tool UI, inspector, events, tests — **done** |
+| **M2 — AG-UI** | Fixture `AbstractAgent`, protocol inspector, shared state, interrupt/resume — **done** |
+| **M2.1 — Live agent** | HttpAgent + OpenRouter (optional) — [#10](https://github.com/Ensive/genui-lab/issues/10) · [design](docs/design/m2.1-live-agent.md) |
+| **M3 — Declarative GenUI** | json-render, A2UI, OpenUI on the same task — [#11](https://github.com/Ensive/genui-lab/issues/11) · [design](docs/design/m3-declarative-genui.md) |
+| **M4 — assistant-ui** | Compare shell vs Spec Mode / AG-UI runtime — [#12](https://github.com/Ensive/genui-lab/issues/12) · [design](docs/design/m4-assistant-ui.md) |
+| **M5 — MCP App** | Sandboxed telemetry explorer vs catalog UI — [#13](https://github.com/Ensive/genui-lab/issues/13) · [design](docs/design/m5-mcp-app.md) |
+| **M6 — Intelligent routing** | Rules / semantic / bounded / LLM selection — [#14](https://github.com/Ensive/genui-lab/issues/14) · [design](docs/design/m6-intelligent-routing.md) |
+| **M7 — Reliability/evals** | Schema validity, stability, injection, replay, a11y — [#15](https://github.com/Ensive/genui-lab/issues/15) · [design](docs/design/m7-reliability-evals.md) |
+
+Full agent handoff index: [docs/design/roadmap.md](docs/design/roadmap.md) · start at [AGENTS.md](AGENTS.md).
 
 ## License
 

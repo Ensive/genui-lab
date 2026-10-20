@@ -8,93 +8,106 @@ Experimental research lab for generative, agentic, and intelligent user interfac
 
 ```text
 deterministic domain analysis → representation adapter → renderer → inspector
+                         ↘ AG-UI protocol (fixture now; live agent in M2.1)
 ```
 
 Same task, multiple architectures — so control, latency, state behavior, safety, observability, and UX can be compared empirically.
+
+## Cold-start (new conversation)
+
+You do **not** need the founding chat prompt. Read in order:
+
+1. This file  
+2. [`GLOSSARY.md`](GLOSSARY.md)  
+3. [`docs/adr/`](docs/adr/) (0001–0003)  
+4. [`docs/design/roadmap.md`](docs/design/roadmap.md)  
+5. The open GitHub issue + design doc for the milestone you will implement  
+
+Then: `/grill-with-docs` (only if decisions remain) → `/to-spec` → `/to-tickets` → `/tdd` / `/implement`.
 
 ## Current state
 
 | Item | Status |
 | --- | --- |
-| Milestone | **M2 — AG-UI fixture agent** complete on this PR / after merge on `main` |
+| Milestone | **M2 — AG-UI fixture agent** complete on `main` |
 | Working modes | Markdown, Tool-bound React UI |
 | Agent protocol | Simulated AG-UI 1.0 fixture agent (interrupt → resume); not a render mode |
-| Planned modes (UI stubs only) | Generated tree, json-render, A2UI, OpenUI, MCP App |
-| Offline / API key | Core experiments + fixture agent run offline — **no API key** |
+| Planned modes (UI stubs) | Generated tree, json-render, A2UI, OpenUI, MCP App |
+| Offline / API key | Core + fixture agent offline — **no API key** |
+| Env template | [`.env.example`](.env.example) for M2.1+ |
 | Repo | [Ensive/genui-lab](https://github.com/Ensive/genui-lab) |
-| Spec / tickets | [#3](https://github.com/Ensive/genui-lab/issues/3) · [#4](https://github.com/Ensive/genui-lab/issues/4)–[#7](https://github.com/Ensive/genui-lab/issues/7) |
 
-## Next milestone (do this next)
+## Roadmap issues (implement these)
 
-**M2.1 — Live agent (optional)** or **M3 — Declarative GenUI**
+| Milestone | Issue | Design |
+| --- | --- | --- |
+| M2.1 Live agent (optional) | [#10](https://github.com/Ensive/genui-lab/issues/10) | [m2.1-live-agent.md](docs/design/m2.1-live-agent.md) |
+| M3 Declarative GenUI | [#11](https://github.com/Ensive/genui-lab/issues/11) | [m3-declarative-genui.md](docs/design/m3-declarative-genui.md) |
+| M4 assistant-ui | [#12](https://github.com/Ensive/genui-lab/issues/12) | [m4-assistant-ui.md](docs/design/m4-assistant-ui.md) |
+| M5 MCP App | [#13](https://github.com/Ensive/genui-lab/issues/13) | [m5-mcp-app.md](docs/design/m5-mcp-app.md) |
+| M6 Intelligent routing | [#14](https://github.com/Ensive/genui-lab/issues/14) | [m6-intelligent-routing.md](docs/design/m6-intelligent-routing.md) |
+| M7 Reliability / evals | [#15](https://github.com/Ensive/genui-lab/issues/15) | [m7-reliability-evals.md](docs/design/m7-reliability-evals.md) |
 
-- **M2.1:** `HttpAgent` + OpenRouter behind the same Protocol / Shared state inspector (`.env.local`; never invent token/cost metrics)
-- **M3:** same telemetry task through json-render / A2UI / OpenUI as **representation** modes
-- Do **not** conflate AG-UI with UI representation formats (ADR-0001 / ADR-0003)
+Done: M1 · M2 ([#3](https://github.com/Ensive/genui-lab/issues/3) closed). Human: [#9](https://github.com/Ensive/genui-lab/issues/9) (repo home decision).
+
+## Next milestone (default)
+
+**M3 — Declarative GenUI** ([#11](https://github.com/Ensive/genui-lab/issues/11)) unless the user asks for **M2.1** first.
+
+- Do **not** conflate AG-UI with A2UI / json-render / OpenUI (ADR-0001 / ADR-0003)
+- Keep Telemetry 001 as the canonical task
 
 ## Before you change code
 
-1. Read [docs/architecture/overview.md](docs/architecture/overview.md)
-2. Read ADRs in [docs/adr/](docs/adr/) — especially ADR-0001, ADR-0002, and ADR-0003
-3. Use vocabulary from [GLOSSARY.md](GLOSSARY.md)
-4. Skim the design notes under [docs/architecture/](docs/architecture/) and [docs/design/m1-foundation.md](docs/design/m1-foundation.md) if touching boundaries
+1. Read [docs/architecture/overview.md](docs/architecture/overview.md)  
+2. Read ADRs — especially ADR-0001, ADR-0002, ADR-0003  
+3. Use vocabulary from [GLOSSARY.md](GLOSSARY.md)  
+4. Read the milestone design under [docs/design/](docs/design/)  
 
 ## Package boundaries
 
 | Package / app | Owns | Must not |
 | --- | --- | --- |
-| `packages/domain` | Telemetry types, anomaly analysis, normalized `TelemetryAnalysis` | Import React / Markdown / UI frameworks |
-| `packages/fixtures` | Deterministic synthetic telemetry + canonical task | Non-reproducible randomness, proprietary data |
-| `packages/ui-contract` | Controlled component vocabulary, stable IDs, Zod schemas | React implementations (unless strongly justified) |
-| `packages/experiment-core` | `ExperimentRequest` / `ExperimentRun`, render modes, representation adapters, runner | Domain-specific analysis logic |
-| `packages/observability` | Lab lifecycle events + honest timing metrics | Invented LLM/cost/TTFT values; AG-UI event types |
-| `packages/ag-ui-adapter` | AG-UI protocol + fixture `AbstractAgent`; shared-state helpers | Become a render mode; own authoritative domain state |
-| `apps/web` | React shell, design system, renderers, inspector, HITL controls | Becoming the source of truth for domain state |
-
-Vertical **data** flow today (not package import arrows — see [packages.md](docs/architecture/packages.md)):
-
-```text
-fixture samples → analyzeTelemetry → representation adapters → renderers + inspector
-                              ↘ ag-ui-adapter (protocol events / shared state / HITL)
-```
-
+| `packages/domain` | Telemetry types, anomaly analysis, `TelemetryAnalysis` | Import React / UI frameworks |
+| `packages/fixtures` | Deterministic synthetic telemetry + canonical task | Proprietary data, unseeded randomness |
+| `packages/ui-contract` | Controlled component vocabulary, stable IDs | Premature mega-framework |
+| `packages/experiment-core` | Runs, render modes, representation adapters | Domain math; AG-UI event ownership |
+| `packages/observability` | Lab lifecycle events + honest timing | Invented LLM metrics; AG-UI types |
+| `packages/ag-ui-adapter` | AG-UI protocol + fixture agent | Become a render mode; own domain truth |
+| `apps/web` | Shell, renderers, inspector, HITL | Be domain source of truth |
 
 ## Hard constraints
 
-- **Authoritative state is deterministic.** Generated UI is a representation, not the source of truth.
-- **Stable semantic IDs** (`metric:battery-temp-max`, `alert:temperature-anomaly-001`) — never array indexes as identities.
-- **No fake universal AST** that erases protocol differences (ADR-0001).
-- **Fixture-first before models** (ADR-0002). Do not require an LLM or API key for core paths.
-- **Do not invent metrics:** TTFT / TTFC / TTI / TTC / tokens / cost stay `null` until honestly instrumented.
-- **Planned render modes** may appear in the UI as planned; do not install or stub-implement those frameworks until their milestone.
-- **Synthetic data only.** Never employer / customer / proprietary data.
-- Prefer small modules and explicit boundaries over premature abstraction.
+- Authoritative domain state is deterministic; UI is a representation.  
+- Stable semantic IDs — never array indexes as identities.  
+- No fake universal AST (ADR-0001).  
+- Fixture-first before models (ADR-0002); core works without API keys.  
+- Do not invent TTFT / tokens / cost.  
+- Planned modes stay stubs until their milestone.  
+- Synthetic data only.  
 
 ## Validation
 
 ```bash
 pnpm install
-pnpm check          # lint + typecheck + unit tests + build
-pnpm test           # unit tests
-pnpm test:e2e       # Playwright
-pnpm dev            # apps/web
+pnpm check
+pnpm test
+pnpm test:e2e
+pnpm dev
 ```
 
-Definition of done for a change: `pnpm check` green; e2e green if UI behavior changed; no secrets; lockfile committed when deps change.
-
-## Design & roadmap pointers
+## Design & architecture index
 
 | Doc | Purpose |
 | --- | --- |
-| [docs/design/m1-foundation.md](docs/design/m1-foundation.md) | M1 vertical-slice design captured from the bootstrap spec |
-| [docs/architecture/overview.md](docs/architecture/overview.md) | Problem, layers, control spectrum |
+| [docs/design/roadmap.md](docs/design/roadmap.md) | Full M1–M7 track + issue links |
+| [docs/design/README.md](docs/design/README.md) | Design doc index |
+| [docs/architecture/overview.md](docs/architecture/overview.md) | Layers + control spectrum |
 | [docs/architecture/packages.md](docs/architecture/packages.md) | Workspace ownership |
-| [docs/architecture/representations.md](docs/architecture/representations.md) | Adapter pattern + modes |
-| [docs/architecture/ui-contract.md](docs/architecture/ui-contract.md) | Controlled vocabulary + stable IDs |
-| [docs/architecture/observability.md](docs/architecture/observability.md) | Events and honest timing |
-| [docs/architecture/protocols.md](docs/architecture/protocols.md) | Why AG-UI / A2UI / json-render / OpenUI / MCP Apps / assistant-ui differ |
+| [docs/architecture/protocols.md](docs/architecture/protocols.md) | Why protocols ≠ representations |
+| [docs/architecture/observability.md](docs/architecture/observability.md) | Lab vs protocol observability |
 | [docs/experiments/telemetry-001.md](docs/experiments/telemetry-001.md) | First experiment |
-| [README.md](README.md) | Public roadmap M1–M7 |
+| [README.md](README.md) | Public overview |
 
 ## Agent skills
 
@@ -104,8 +117,8 @@ GitHub Issues on [Ensive/genui-lab](https://github.com/Ensive/genui-lab) via `gh
 
 ### Triage labels
 
-Default five-role vocabulary (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See [docs/agents/triage-labels.md](docs/agents/triage-labels.md).
+`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`. See [docs/agents/triage-labels.md](docs/agents/triage-labels.md).
 
 ### Domain docs
 
-Single-context: root [GLOSSARY.md](GLOSSARY.md) + [docs/adr/](docs/adr/). See [docs/agents/domain.md](docs/agents/domain.md).
+Single-context: [GLOSSARY.md](GLOSSARY.md) + [docs/adr/](docs/adr/). See [docs/agents/domain.md](docs/agents/domain.md).
