@@ -3,10 +3,19 @@ import { useState } from "react";
 import { cn } from "@/lib/cn";
 import { Badge } from "./ui/badge";
 
-type InspectorTab = "run" | "domain" | "representation" | "events" | "metrics";
+type InspectorTab =
+  | "run"
+  | "domain"
+  | "representation"
+  | "protocol"
+  | "shared-state"
+  | "lab-lifecycle"
+  | "metrics";
 
 interface InspectorProps {
   run: ExperimentRun | null;
+  protocolEvents?: unknown[];
+  sharedState?: unknown;
   renderStartedAt?: number | null;
   renderFinishedAt?: number | null;
 }
@@ -15,7 +24,9 @@ const TABS: { id: InspectorTab; label: string }[] = [
   { id: "run", label: "Run" },
   { id: "domain", label: "Domain result" },
   { id: "representation", label: "Representation" },
-  { id: "events", label: "Events" },
+  { id: "protocol", label: "Protocol" },
+  { id: "shared-state", label: "Shared state" },
+  { id: "lab-lifecycle", label: "Lab lifecycle" },
   { id: "metrics", label: "Timing" },
 ];
 
@@ -27,7 +38,13 @@ function JsonBlock({ value }: { value: unknown }) {
   );
 }
 
-export function Inspector({ run, renderStartedAt, renderFinishedAt }: InspectorProps) {
+export function Inspector({
+  run,
+  protocolEvents = [],
+  sharedState = null,
+  renderStartedAt,
+  renderFinishedAt,
+}: InspectorProps) {
   const [tab, setTab] = useState<InspectorTab>("run");
 
   return (
@@ -58,12 +75,12 @@ export function Inspector({ run, renderStartedAt, renderFinishedAt }: InspectorP
       </div>
 
       <div className="min-h-0 flex-1 overflow-auto p-3" role="tabpanel">
-        {!run ? (
+        {!run && tab !== "protocol" && tab !== "shared-state" ? (
           <p className="text-sm text-[var(--color-ink-muted)]">
-            Run an experiment to populate run metadata, domain result, representation, events, and
-            timing.
+            Run an experiment to populate run metadata, domain result, representation, lab
+            lifecycle, and timing. Protocol tabs fill when the simulated AG-UI agent runs.
           </p>
-        ) : tab === "run" ? (
+        ) : tab === "run" && run ? (
           <dl className="space-y-3 text-sm" data-testid="inspector-run">
             <div>
               <dt className="text-xs text-[var(--color-ink-muted)]">Run ID</dt>
@@ -98,11 +115,11 @@ export function Inspector({ run, renderStartedAt, renderFinishedAt }: InspectorP
               <dd className="font-mono">{run.durationMs?.toFixed(2) ?? "—"} ms</dd>
             </div>
           </dl>
-        ) : tab === "domain" ? (
+        ) : tab === "domain" && run ? (
           <div data-testid="inspector-domain">
             {run.domainResult ? <JsonBlock value={run.domainResult} /> : <p>No domain result.</p>}
           </div>
-        ) : tab === "representation" ? (
+        ) : tab === "representation" && run ? (
           <div data-testid="inspector-representation" className="space-y-2">
             <p className="text-xs text-[var(--color-ink-muted)]">
               Raw representation payload for mode{" "}
@@ -120,26 +137,72 @@ export function Inspector({ run, renderStartedAt, renderFinishedAt }: InspectorP
               <p>No representation.</p>
             )}
           </div>
-        ) : tab === "events" ? (
-          <ol className="space-y-2 font-mono text-[11px]" data-testid="inspector-events">
-            {run.events.map((event) => (
-              <li
-                key={event.id}
-                className="grid grid-cols-[4.5rem_1fr] gap-2 rounded border border-[var(--color-line)] px-2 py-1.5"
-              >
-                <span className="text-[var(--color-ink-muted)]">
-                  +{event.offsetMs.toFixed(1)}ms
-                </span>
-                <span>
-                  {event.type}
-                  {event.message ? (
-                    <span className="block text-[var(--color-ink-muted)]">{event.message}</span>
-                  ) : null}
-                </span>
-              </li>
-            ))}
-          </ol>
-        ) : (
+        ) : tab === "protocol" ? (
+          <div className="space-y-2" data-testid="inspector-protocol">
+            <p className="text-xs text-[var(--color-ink-muted)]">
+              Raw AG-UI protocol events. Distinct from lab lifecycle — both may include{" "}
+              <code>RUN_STARTED</code>.
+            </p>
+            {protocolEvents.length === 0 ? (
+              <p className="text-sm text-[var(--color-ink-muted)]">No protocol events yet.</p>
+            ) : (
+              <ol className="space-y-2 font-mono text-[11px]">
+                {protocolEvents.map((event, index) => {
+                  const type =
+                    typeof event === "object" && event !== null && "type" in event
+                      ? String((event as { type: unknown }).type)
+                      : "unknown";
+                  return (
+                    <li
+                      key={`${type}-${String(index)}`}
+                      className="rounded border border-[var(--color-line)] px-2 py-1.5"
+                    >
+                      <span className="text-[var(--color-accent)]">{type}</span>
+                      <pre className="mt-1 overflow-auto whitespace-pre-wrap text-[10px] text-[var(--color-ink-muted)]">
+                        {JSON.stringify(event, null, 2)}
+                      </pre>
+                    </li>
+                  );
+                })}
+              </ol>
+            )}
+          </div>
+        ) : tab === "shared-state" ? (
+          <div data-testid="inspector-shared-state" className="space-y-2">
+            <p className="text-xs text-[var(--color-ink-muted)]">
+              AG-UI shared state (snapshot/delta). Not authoritative domain analysis.
+            </p>
+            {sharedState ? (
+              <JsonBlock value={sharedState} />
+            ) : (
+              <p className="text-sm text-[var(--color-ink-muted)]">No shared state yet.</p>
+            )}
+          </div>
+        ) : tab === "lab-lifecycle" && run ? (
+          <div className="space-y-2">
+            <p className="text-xs text-[var(--color-ink-muted)]">
+              Lab lifecycle events from experiment-core (not AG-UI).
+            </p>
+            <ol className="space-y-2 font-mono text-[11px]" data-testid="inspector-events">
+              {run.events.map((event) => (
+                <li
+                  key={event.id}
+                  className="grid grid-cols-[4.5rem_1fr] gap-2 rounded border border-[var(--color-line)] px-2 py-1.5"
+                >
+                  <span className="text-[var(--color-ink-muted)]">
+                    +{event.offsetMs.toFixed(1)}ms
+                  </span>
+                  <span>
+                    {event.type}
+                    {event.message ? (
+                      <span className="block text-[var(--color-ink-muted)]">{event.message}</span>
+                    ) : null}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        ) : tab === "metrics" && run ? (
           <div className="space-y-4 text-sm" data-testid="inspector-metrics">
             <dl className="space-y-3">
               <div>
@@ -169,17 +232,11 @@ export function Inspector({ run, renderStartedAt, renderFinishedAt }: InspectorP
               <p className="font-medium text-[var(--color-ink)]">Measurement notes</p>
               <ul className="mt-2 list-disc space-y-1 pl-4">
                 <li>
-                  <code>domainAnalysisMs</code> / <code>representationMs</code> come from lifecycle
-                  events around deterministic local work.
+                  Lab timing metrics are honest local work only. AG-UI fixture does not invent TTFT
+                  or token counts.
                 </li>
                 <li>
-                  Host paint timing above is best-effort React commit/paint delta kept in UI state.
-                  <code>RENDER_STARTED</code> / <code>RENDER_FINISHED</code> exist on the event
-                  schema but are <strong>not</strong> appended to <code>run.events</code> in M1.
-                </li>
-                <li>
-                  Future placeholders (never invented): TTFT, TTFC, TTI, TTC, inputTokens,
-                  outputTokens, cost.
+                  Placeholders stay null until real instrumentation exists — never invent values.
                 </li>
               </ul>
               <dl className="mt-3 grid grid-cols-2 gap-2 font-mono text-[10px]">
@@ -193,6 +250,8 @@ export function Inspector({ run, renderStartedAt, renderFinishedAt }: InspectorP
               </dl>
             </div>
           </div>
+        ) : (
+          <p className="text-sm text-[var(--color-ink-muted)]">Nothing to show for this tab yet.</p>
         )}
       </div>
     </section>

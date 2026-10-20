@@ -1,14 +1,16 @@
-# Observability model (M1)
+# Observability model (M1 + M2)
 
 ## Purpose
 
 Make architectural comparison **measurable** without lying about what we can measure.
 
-`packages/observability` records lifecycle events with monotonic offsets (`performance.now()` / compatible fallback) and derives metrics only from complete start/finish pairs.
+`packages/observability` records **lab lifecycle** events with monotonic offsets (`performance.now()` / compatible fallback) and derives metrics only from complete start/finish pairs.
 
-OpenTelemetry is **not** a dependency in M1; event shapes should map cleanly later.
+AG-UI protocol events live in a **separate stream** (collected from `TelemetryFixtureAgent` in `apps/web`). Do not merge or translate lab events into AG-UI events.
 
-## Lifecycle events emitted by the runner today
+OpenTelemetry is **not** a dependency in M1/M2; event shapes should map cleanly later.
+
+## Lab lifecycle events emitted by the runner today
 
 `runExperiment` appends these to `ExperimentRun.events` on a successful path:
 
@@ -23,30 +25,41 @@ OpenTelemetry is **not** a dependency in M1; event shapes should map cleanly lat
 
 On failure, `ERROR` is recorded (and the run may not reach `RUN_COMPLETED`).
 
-### Reserved schema types (not emitted in M1 runs)
+### Reserved schema types (not emitted in M1/M2 runs)
 
-The event enum also includes `RENDER_STARTED`, `RENDER_FINISHED`, and `INTERACTION`.
+The lab event enum also includes `RENDER_STARTED`, `RENDER_FINISHED`, and `INTERACTION`.
 
-In M1 these are **schema placeholders only**. The experiment recorder does **not** append them to `run.events`. Do not document or implement as if they already appear in the inspector event list.
+These are **schema placeholders only**. The experiment recorder does **not** append them to `run.events`.
+
+## AG-UI protocol events (M2)
+
+Emitted by `@genui-lab/ag-ui-adapter` (fixture agent), validated against `@ag-ui/core` schemas. Typical Run A:
+
+```text
+RUN_STARTED
+TOOL_CALL_START / TOOL_CALL_ARGS / TOOL_CALL_END
+STATE_SNAPSHOT
+RUN_FINISHED (outcome.type = "interrupt")
+```
+
+Typical Run B (after resume):
+
+```text
+RUN_STARTED
+TOOL_CALL_RESULT
+STATE_DELTA / STATE_SNAPSHOT
+RUN_FINISHED (outcome.type = "success")
+```
+
+Both lab and protocol streams may contain `RUN_STARTED` — inspector labels keep them distinct.
 
 ## Host paint timing (out-of-band)
 
 `apps/web` may measure best-effort time around React commit/paint of the result panel and show it in the Timing tab as separate host UI state.
 
-That measurement is **not** a lifecycle event on the run today. Wire `RENDER_*` into the recorder only when the host can honestly emit them.
+That measurement is **not** a lifecycle event on the run today.
 
-Do not invent render completion times if the runtime cannot honestly observe them.
-
-### Measurement ownership
-
-| Concern | Owner | M1 reality |
-| --- | --- | --- |
-| Domain analysis | `runExperiment` / recorder | Emitted event pair |
-| Representation | `runExperiment` / recorder | Emitted event pair |
-| Render / paint | Host UI (`apps/web`) | Out-of-band best-effort; not in `run.events` |
-| Interaction | Future | Reserved type; not emitted |
-
-## Honest metrics (M1)
+## Honest metrics (M1/M2)
 
 | Field | Source |
 | --- | --- |
@@ -66,9 +79,13 @@ outputTokens
 costUsd
 ```
 
-Inventing these values pollutes future evals.
+Inventing these values pollutes future evals. The Timing tab should show these as explicit `null` placeholders.
 
 ## Inspector expectations
 
-- **Events** tab: chronological list from `run.events` with `+X.Xms` offsets (runner-emitted only).
-- **Timing** tab: derived runner metrics; optional host paint delta; placeholders called out as unimplemented.
+| Tab | Shows |
+| --- | --- |
+| **Lab lifecycle** | Chronological `run.events` with `+X.Xms` offsets (runner-emitted only) |
+| **Protocol** | Raw AG-UI events from the fixture (or later live) agent |
+| **Shared state** | Latest AG-UI `agent.state` (compact; not full `TelemetryAnalysis`) |
+| **Timing** | Derived runner metrics; optional host paint delta; null LLM placeholders |

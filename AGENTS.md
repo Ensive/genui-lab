@@ -16,26 +16,26 @@ Same task, multiple architectures — so control, latency, state behavior, safet
 
 | Item | Status |
 | --- | --- |
-| Milestone | **M1 — Foundation** complete on `main` |
+| Milestone | **M2 — AG-UI fixture agent** complete on this PR / after merge on `main` |
 | Working modes | Markdown, Tool-bound React UI |
+| Agent protocol | Simulated AG-UI 1.0 fixture agent (interrupt → resume); not a render mode |
 | Planned modes (UI stubs only) | Generated tree, json-render, A2UI, OpenUI, MCP App |
-| Offline / API key | Core experiments run with fixtures only — **no API key** |
+| Offline / API key | Core experiments + fixture agent run offline — **no API key** |
 | Repo | [Ensive/genui-lab](https://github.com/Ensive/genui-lab) |
+| Spec / tickets | [#3](https://github.com/Ensive/genui-lab/issues/3) · [#4](https://github.com/Ensive/genui-lab/issues/4)–[#7](https://github.com/Ensive/genui-lab/issues/7) |
 
 ## Next milestone (do this next)
 
-**M2 — AG-UI 1.0 agent/runtime adapter**
+**M2.1 — Live agent (optional)** or **M3 — Declarative GenUI**
 
-- Expose agent lifecycle + state snapshot/delta in the inspector
-- Treat AG-UI as an **agent ↔ application protocol**, not a UI representation format
-- Do **not** start M3+ (declarative GenUI frameworks) in the same change set
-
-Tracked context: issue [#1](https://github.com/Ensive/genui-lab/issues/1) (handoff docs); open a dedicated M2 issue when starting that work.
+- **M2.1:** `HttpAgent` + OpenRouter behind the same Protocol / Shared state inspector (`.env.local`; never invent token/cost metrics)
+- **M3:** same telemetry task through json-render / A2UI / OpenUI as **representation** modes
+- Do **not** conflate AG-UI with UI representation formats (ADR-0001 / ADR-0003)
 
 ## Before you change code
 
 1. Read [docs/architecture/overview.md](docs/architecture/overview.md)
-2. Read ADRs in [docs/adr/](docs/adr/) — especially ADR-0001 and ADR-0002
+2. Read ADRs in [docs/adr/](docs/adr/) — especially ADR-0001, ADR-0002, and ADR-0003
 3. Use vocabulary from [GLOSSARY.md](GLOSSARY.md)
 4. Skim the design notes under [docs/architecture/](docs/architecture/) and [docs/design/m1-foundation.md](docs/design/m1-foundation.md) if touching boundaries
 
@@ -47,14 +47,17 @@ Tracked context: issue [#1](https://github.com/Ensive/genui-lab/issues/1) (hando
 | `packages/fixtures` | Deterministic synthetic telemetry + canonical task | Non-reproducible randomness, proprietary data |
 | `packages/ui-contract` | Controlled component vocabulary, stable IDs, Zod schemas | React implementations (unless strongly justified) |
 | `packages/experiment-core` | `ExperimentRequest` / `ExperimentRun`, render modes, representation adapters, runner | Domain-specific analysis logic |
-| `packages/observability` | Lifecycle events + honest timing metrics | Invented LLM/cost/TTFT values |
-| `apps/web` | React shell, design system, renderers, inspector | Becoming the source of truth for domain state |
+| `packages/observability` | Lab lifecycle events + honest timing metrics | Invented LLM/cost/TTFT values; AG-UI event types |
+| `packages/ag-ui-adapter` | AG-UI protocol + fixture `AbstractAgent`; shared-state helpers | Become a render mode; own authoritative domain state |
+| `apps/web` | React shell, design system, renderers, inspector, HITL controls | Becoming the source of truth for domain state |
 
 Vertical **data** flow today (not package import arrows — see [packages.md](docs/architecture/packages.md)):
 
 ```text
-fixture samples → analyzeTelemetry → adapters → renderers + inspector
+fixture samples → analyzeTelemetry → representation adapters → renderers + inspector
+                              ↘ ag-ui-adapter (protocol events / shared state / HITL)
 ```
+
 
 ## Hard constraints
 
