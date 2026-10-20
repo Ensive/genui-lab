@@ -48,7 +48,7 @@ Then: `/grill-with-docs` (only if decisions remain) → `/to-spec` → `/to-tick
 | M6 Intelligent routing | [#14](https://github.com/Ensive/genui-lab/issues/14) | [m6-intelligent-routing.md](docs/design/m6-intelligent-routing.md) |
 | M7 Reliability / evals | [#15](https://github.com/Ensive/genui-lab/issues/15) | [m7-reliability-evals.md](docs/design/m7-reliability-evals.md) |
 
-Done: M1 · M2 ([#3](https://github.com/Ensive/genui-lab/issues/3) closed). Human: [#9](https://github.com/Ensive/genui-lab/issues/9) (repo home decision).
+Done: M1 ([#17](https://github.com/Ensive/genui-lab/issues/17)) · M2 ([#3](https://github.com/Ensive/genui-lab/issues/3)). Human: [#9](https://github.com/Ensive/genui-lab/issues/9) (repo home decision).
 
 ## Next milestone (default)
 

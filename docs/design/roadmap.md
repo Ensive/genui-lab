@@ -22,7 +22,7 @@ intent → intelligence/agent → tools + authoritative state → representation
 
 | ID | Name | Status | Design | Issue |
 | --- | --- | --- | --- | --- |
-| M1 | Foundation | **Done** | [m1-foundation.md](./m1-foundation.md) | Bootstrap |
+| M1 | Foundation | **Done** | [m1-foundation.md](./m1-foundation.md) | [#17](https://github.com/Ensive/genui-lab/issues/17) closed |
 | M2 | AG-UI fixture agent | **Done** | [m2-ag-ui.md](./m2-ag-ui.md) | [#3](https://github.com/Ensive/genui-lab/issues/3) closed |
 | M2.1 | Live AG-UI + OpenRouter | Open | [m2.1-live-agent.md](./m2.1-live-agent.md) | [#10](https://github.com/Ensive/genui-lab/issues/10) |
 | M3 | Declarative GenUI | Open | [m3-declarative-genui.md](./m3-declarative-genui.md) | [#11](https://github.com/Ensive/genui-lab/issues/11) |
