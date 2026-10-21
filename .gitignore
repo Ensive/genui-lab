@@ -19,8 +19,12 @@ blob-report
 !.vscode/extensions.json
 .scratch/
 
-# Local agent tooling (not part of the published lab)
-.agents/
+# Local agent tooling (not part of the published lab).
+# The lab-owned worktree skill is the exception.
+.agents/*
+!.agents/skills/
+.agents/skills/*
+!.agents/skills/using-git-worktrees/
 skills-lock.json
 
 # Git worktrees (local isolation)

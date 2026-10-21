@@ -122,3 +122,7 @@ GitHub Issues on [Ensive/genui-lab](https://github.com/Ensive/genui-lab) via `gh
 ### Domain docs
 
 Single-context: [GLOSSARY.md](GLOSSARY.md) + [docs/adr/](docs/adr/). See [docs/agents/domain.md](docs/agents/domain.md).
+
+### Parallel work
+
+Independent tasks use a git worktree at `.worktrees/<branch>`. Follow the `using-git-worktrees` skill. Do not commit worktree contents.
